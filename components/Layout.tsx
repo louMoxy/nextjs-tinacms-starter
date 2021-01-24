@@ -1,6 +1,6 @@
 import { Header } from './Header'
 import { ReactNode } from 'react'
-import {Box, Flex, Text} from '@chakra-ui/layout'
+import { Box, Text } from '@chakra-ui/layout'
 
 interface Props {
   children: ReactNode

@@ -1,12 +1,9 @@
-const withPlugins = require('next-compose-plugins')
-const nextImg = require('next-img/plugin')
+require('dotenv').config()
 
-module.exports = withPlugins([
-  [
-    nextImg,
-    {
-      // specify the default breakpoints
-      breakpoints: [768]
-    }
-  ]
-])
+module.exports = {
+  env: {
+    GITHUB_CLIENT_ID: process.env.GITHUB_CLIENT_ID,
+    REPO_FULL_NAME: process.env.REPO_FULL_NAME,
+    BASE_BRANCH: process.env.BASE_BRANCH
+  }
+}
