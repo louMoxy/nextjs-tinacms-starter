@@ -90,7 +90,7 @@ export const getStaticPaths = async function () {
     .filter((file) => !file.endsWith('index.json'))
     .map((file) => {
       const slug = file.replace('.json', '').replace(contentDir, '').replace('/', '')
-      return { params: { slug } }
+      return { params: { slug, pageName: file.replace('.json', '') } }
     })
   return {
     fallback: true,
