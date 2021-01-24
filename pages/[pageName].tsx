@@ -38,8 +38,9 @@ export default function Page (props: any) {
 //  * Fetch data with getStaticProps based on 'preview' mode
 //  */
 export const getStaticProps = async function ({ preview, previewData, params }) {
-  const { slug } = params
-  const fileRelativePath = `content/${slug}.json`
+  console.log('params', params)
+  const { pageName } = params
+  const fileRelativePath = `content/${pageName}.json`
   if (preview) {
     try {
       const previewProps = await getGithubPreviewProps({
@@ -66,14 +67,13 @@ export const getStaticProps = async function ({ preview, previewData, params }) 
     }
   }
 
-  const content = (await import(`../content/${slug}.json`)).default
+  const content = (await import(`../content/${pageName}.json`)).default
 
   return {
     props: {
       sourceProvider: null,
       error: null,
       preview: false,
-      ...global,
       file: {
         fileRelativePath,
         data: content
@@ -90,7 +90,7 @@ export const getStaticPaths = async function () {
     .filter((file) => !file.endsWith('index.json'))
     .map((file) => {
       const slug = file.replace('.json', '').replace(contentDir, '').replace('/', '')
-      return { params: { slug, pageName: file.replace('.json', '') } }
+      return { params: { pageName: slug } }
     })
   return {
     fallback: true,
