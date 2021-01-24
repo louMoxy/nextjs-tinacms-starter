@@ -34,27 +34,6 @@ export default function Page (props: any) {
   )
 }
 
-Page.getInitialProps = async function (ctx) {
-  const { slug } = ctx.query
-  // const content = await import(`../../content/${slug}.md`)
-  // const config = await import(`../../data/config.json`)
-  const data = {
-    title: 'tester'
-  }
-
-  return {
-    file: {
-      title: 'title'
-    },
-    markdownFile: {
-      fileRelativePath: `content/${slug}.md`,
-      frontmatter: data,
-      markdownBody: data
-    },
-    title: 'title'
-  }
-}
-
 // /**
 //  * Fetch data with getStaticProps based on 'preview' mode
 //  */
