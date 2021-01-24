@@ -1,4 +1,4 @@
-import { useLayoutEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Flex, Box, useMediaQuery, Menu, MenuList, MenuItem, MenuButton, Link as UILink } from '@chakra-ui/react'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
@@ -23,7 +23,7 @@ export const Header = () => {
   const router = useRouter()
   const [isLargeScreen] = useMediaQuery('(min-width: 900px)')
   const [Nav, setNav] = useState(null)
-  useLayoutEffect(() => {
+  useEffect(() => {
     if (isLargeScreen) {
       setNav(dummyNav.map(({ name, link }, index) => (
         <Link href={link} key={index} passHref><UILink p='4' className={router.pathname ? 'active' : ''}>{name}</UILink></Link>

@@ -1,13 +1,13 @@
 import '../styles/globals.css'
 import { ChakraProvider, extendTheme, ThemeConfig } from '@chakra-ui/react'
-import App, { AppProps } from 'next/app'
+import App from 'next/app'
 import { TinaCMS, TinaProvider } from 'tinacms'
 import {
   GithubClient,
   TinacmsGithubProvider,
   GithubMediaStore
 } from 'react-tinacms-github'
-import { useEffect, useState } from 'react'
+import { DateFieldPlugin } from 'react-tinacms-date'
 
 const sizes = {
   sm: '400px',
@@ -29,7 +29,7 @@ const onLogin = async () => {
   const resp = await fetch('/api/preview', { headers: headers })
   const data = await resp.json()
 
-  if (resp.status == 200) window.location.href = window.location.pathname
+  if (resp.status === 200) window.location.href = window.location.pathname
   else throw new Error(data.message)
 }
 
@@ -62,6 +62,12 @@ export default class Site extends App {
       sidebar: props.pageProps.preview,
       toolbar: props.pageProps.preview
     })
+    this.cms.plugins.add(DateFieldPlugin)
+    import('react-tinacms-editor').then(
+      ({ HtmlFieldPlugin }) => {
+        this.cms.plugins.add(HtmlFieldPlugin)
+      }
+    )
   }
 
   render () {

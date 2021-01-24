@@ -2,16 +2,18 @@ import { Layout } from '../components/Layout'
 import { Box, Text } from '@chakra-ui/layout'
 import { getGithubPreviewProps, parseJson } from 'next-tinacms-github'
 import { GetStaticProps } from 'next'
+import { usePlugin } from 'tinacms'
+import { useGithubJsonForm } from 'react-tinacms-github'
+import { GitFile } from 'react-tinacms-github/dist/src/form/useGitFileSha'
 
-interface Props {
-  file: {
-    data: {
-      title: string
-    }
-  }
+const formOptions = {
+  label: 'Home Page',
+  fields: [{ name: 'title', component: 'text' }]
 }
-export default function Home ({ file }: Props) {
-  const data = file.data
+
+export default function Home ({ file }: {file: GitFile}) {
+  const [data, form] = useGithubJsonForm(file, formOptions)
+  usePlugin(form)
   return (
     <Layout>
       <Box maxW='xl' justifyContent='center' m='auto' p='3'>
