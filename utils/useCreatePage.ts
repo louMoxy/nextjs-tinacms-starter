@@ -3,7 +3,7 @@ import { useCMS, usePlugins } from 'tinacms'
 import { useRouter } from 'next/router'
 import slugify from 'slugify'
 import { FORM_ERROR } from 'final-form'
-import { removeInvalidChars } from '../utils/removeInvalidChars'
+import { removeInvalidChars } from './removeInvalidChars'
 import { setCachedFormData, getCachedFormData } from './formCache'
 
 export const useCreatePage = (allPages = []) => {
@@ -24,30 +24,22 @@ export const useCreatePage = (allPages = []) => {
             if (!value) {
               return 'A title is required'
             }
-            if (allPages.some((post) => post.fileName === slugify(value, { lower: true }))) {
+            if (allPages.includes(value.toLowerCase())) {
               return 'Sorry the page title must be unique'
             }
           }
-        },
-        {
-          name: 'publish',
-          label: 'Publish the blog to go live?',
-          component: 'toggle',
-          default: false
         }
       ],
       onSubmit: async (frontMatter) => {
         const github = cms.api.github
         const fileName = removeInvalidChars(slugify(frontMatter.title, { lower: true }))
         const fileRelativePath = `content/${fileName}.json`
-        frontMatter.date = frontMatter.date || new Date().toString()
         return await github
           .commit(
             fileRelativePath,
             getCachedFormData(fileRelativePath).sha,
             JSON.stringify({
-              ...frontMatter,
-              publish: false
+              ...frontMatter
             }),
             'Add new page'
           )

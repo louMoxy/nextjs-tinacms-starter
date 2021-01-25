@@ -6,14 +6,13 @@ import { FORM_ERROR } from 'final-form'
 import { removeInvalidChars } from './removeInvalidChars'
 import { setCachedFormData, getCachedFormData } from './formCache'
 
-export const useCreatePage = (allPages = []) => {
-  // Todo get the all pages
+export const useCreateBlogPage = (allBlogs = []) => {
   const router = useRouter()
   const cms = useCMS()
   usePlugins([
     {
       __type: 'content-creator',
-      name: 'Make a new page',
+      name: 'Make a new blog',
       // @ts-ignore
       fields: [
         {
@@ -25,10 +24,25 @@ export const useCreatePage = (allPages = []) => {
             if (!value) {
               return 'A title is required'
             }
-            if (allPages.some((post) => post.fileName === slugify(value, { lower: true }))) {
-              return 'Sorry the page title must be unique'
+            if (allBlogs.includes(value.toLowerCase())) {
+              return 'Sorry the blog title must be unique'
             }
           }
+        },
+        {
+          name: 'description',
+          label: 'Description',
+          component: 'textarea',
+          required: true
+        },
+        {
+          label: 'Feature Image',
+          name: 'featureImg',
+          component: 'image',
+          parse: (media) => `/images/${media.filename}`,
+          uploadDir: () => 'public/images/',
+          previewSrc: (fullSrc) => fullSrc.replace('/public', ''),
+          required: true
         },
         {
           name: 'publish',
@@ -40,22 +54,21 @@ export const useCreatePage = (allPages = []) => {
       onSubmit: async (frontMatter) => {
         const github = cms.api.github
         const fileName = removeInvalidChars(slugify(frontMatter.title, { lower: true }))
-        const fileRelativePath = `content/${fileName}.json`
+        const fileRelativePath = `content/blog/${fileName}.json`
         return await github
           .commit(
             fileRelativePath,
             getCachedFormData(fileRelativePath).sha,
             JSON.stringify({
-              ...frontMatter,
-              publish: false
+              ...frontMatter
             }),
-            'Add new page'
+            'Add new blog page'
           )
           .then((response) => {
             setCachedFormData(fileRelativePath, {
               sha: response.content.sha
             })
-            setTimeout(() => router.push(`/${fileName}`), 1500)
+            setTimeout(() => router.push(`blog/${fileName}`), 1500)
           })
           .catch((e) => {
             return { [FORM_ERROR]: e }

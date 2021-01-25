@@ -3,26 +3,39 @@ import { Box, Text } from '@chakra-ui/layout'
 import { getGithubPreviewProps, parseJson } from 'next-tinacms-github'
 import { usePlugin } from 'tinacms'
 import { useGithubJsonForm } from 'react-tinacms-github'
-// import { GitFile } from 'react-tinacms-github/dist/src/form/useGitFileSha'
+import { GitFile } from 'react-tinacms-github/dist/src/form/useGitFileSha'
 import { useRouter } from 'next/router'
+import { fileToUrl } from '../utils/fileToUrl'
+import { getLocalFiles } from '../utils/getLocalFiles'
+import { useCreatePage } from '../utils/useCreatePage'
+import { useCreateBlogPage } from '../utils/useCreateBlogPage'
 
 const formOptions = {
   label: 'Page',
   fields: [{ name: 'title', component: 'text' }]
 }
 
-export default function Page (props: any) {
-  // const previewURL = props.previewURL || ''
+interface Props {file: GitFile, allPages: string[], allBlogs: string[]}
+
+export default function Page ({ file, allPages, allBlogs }: Props) {
+  useCreatePage(allPages)
+  useCreateBlogPage(allBlogs)
   const router = useRouter()
-  if (!props.file) {
-    return <p>oh nooo</p>
+  if (!file) {
+    return (
+      <Layout>
+        <Box maxW='xl' justifyContent='center' m='auto' p='3'>
+          <Text>No file was found, please check if the build has completed</Text>
+        </Box>
+      </Layout>
+    )
   }
 
   if (router.isFallback) {
     return <div>Loading...</div>
   }
 
-  const [data, form] = useGithubJsonForm(props.file, formOptions)
+  const [data, form] = useGithubJsonForm(file, formOptions)
   usePlugin(form)
 
   return (
@@ -38,7 +51,9 @@ export default function Page (props: any) {
 //  * Fetch data with getStaticProps based on 'preview' mode
 //  */
 export const getStaticProps = async function ({ preview, previewData, params }) {
-  console.log('params', params)
+  const allPages = (await getLocalFiles('content') || []).map((fileName) => fileName.replace('content/', '').replace('.json', ''))
+  const allBlogs = (await getLocalFiles('content/blog') || []).map((fileName) => fileName.replace('content/blog/', '').replace('.json', ''))
+
   const { pageName } = params
   const fileRelativePath = `content/${pageName}.json`
   if (preview) {
@@ -50,6 +65,8 @@ export const getStaticProps = async function ({ preview, previewData, params }) 
       })
       return {
         props: {
+          allPages,
+          allBlogs,
           previewURL: `https://raw.githubusercontent.com/${previewData.working_repo_full_name}/${previewData.head_branch}`,
           ...previewProps.props
         }
@@ -57,8 +74,10 @@ export const getStaticProps = async function ({ preview, previewData, params }) 
     } catch (e) {
       return {
         props: {
+          allPages,
+          allBlogs,
+          previewURL: `https://raw.githubusercontent.com/${previewData.working_repo_full_name}/${previewData.head_branch}`,
           file: {
-            githubDatUrl: `https://raw.githubusercontent.com/${previewData.working_repo_full_name}/${previewData.head_branch}/${fileRelativePath}`,
             fileRelativePath,
             data: null
           }
@@ -71,6 +90,8 @@ export const getStaticProps = async function ({ preview, previewData, params }) 
 
   return {
     props: {
+      allPages,
+      allBlogs,
       sourceProvider: null,
       error: null,
       preview: false,
@@ -89,7 +110,7 @@ export const getStaticPaths = async function () {
   const paths = files
     .filter((file) => !file.endsWith('index.json'))
     .map((file) => {
-      const slug = file.replace('.json', '').replace(contentDir, '').replace('/', '')
+      const slug = fileToUrl(file, contentDir)
       return { params: { pageName: slug } }
     })
   return {
