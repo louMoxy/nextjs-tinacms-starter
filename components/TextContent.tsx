@@ -18,34 +18,35 @@ interface Props {
 
 export const TextContent = ({ index, data }: Props) => {
   const { html, bgColor = 'transparent', textColor, textAlign = 'left', padding = '3', width = widths.container.name } = data
-
   return (
-    <BlocksControls index={index} insetControls>
-      <GridItem bg={bgColor} gridColumn={widths[width].val}>
-        <Box maxW='100%' m='auto' p={padding} textColor={textColor} textAlign={textAlign}>
-          <InlineWysiwyg
-            name="rawMarkdownBody"
-            imageProps={{
-              parse: media => `/${media.filename}`,
-              uploadDir: () => '/public/'
-            }}
-          >
-            {data.html && <div
-              dangerouslySetInnerHTML={{
-                __html: html
+    <GridItem bg={bgColor} gridColumn={widths[width].val} key={index}>
+      <BlocksControls index={index} insetControls label={false}>
+          <Box maxW='100%' m='auto' p={padding} textColor={textColor} textAlign={textAlign}>
+            <InlineWysiwyg
+              name='html'
+              format='html'
+              imageProps={{
+                parse: media => `/${media.filename}`,
+                uploadDir: () => '/public/'
               }}
-            />}
-          </InlineWysiwyg>
-        </Box>
-      </GridItem>
-    </BlocksControls>
+            >
+              {data.html && <div
+                dangerouslySetInnerHTML={{
+                  __html: html
+                }}
+              />}
+            </InlineWysiwyg>
+          </Box>
+      </BlocksControls>
+    </GridItem>
   )
 }
 
 export const TextContentTemplate = {
   label: 'Text and Image content',
   defaultItem: {
-    html: '<p>Add text here</p>'
+    html: '<p>Add text here</p>',
+    width: widths.container.name
   },
   fields: [
     widthField,

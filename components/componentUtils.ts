@@ -39,12 +39,12 @@ export const widthField = {
   label: 'Width',
   options: [
     {
-      value: widths.full.name,
-      label: 'Full width'
-    },
-    {
       value: widths.container.name,
       label: 'Main Container'
+    },
+    {
+      value: widths.full.name,
+      label: 'Full width'
     },
     {
       value: widths.halfLeft.name,

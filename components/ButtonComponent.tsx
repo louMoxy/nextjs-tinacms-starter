@@ -24,18 +24,26 @@ interface Props {
 export const ButtonComponent = ({ index, data }: Props) => {
   const { width = widths.container.name, buttonLink = '/', padding = '3', buttonAlign = 'center', bgColor, textColor, isFullWidth, buttonSize = 'md', variant = 'solid' } = data
   return (
-    <BlocksControls index={index} insetControls>
-      <GridItem gridColumn={widths[width].val} p={padding} textAlign={buttonAlign}>
+    <GridItem gridColumn={widths[width].val} p={padding} textAlign={buttonAlign}>
+      <BlocksControls index={index} insetControls label={false}>
         <Link href={buttonLink} key={index} passHref>
-          <Button bgColor={bgColor} textColor={textColor} isFullWidth={isFullWidth} size={buttonSize} variant={variant}><InlineText name="buttonText" /></Button>
+          <Button bgColor={bgColor} textColor={textColor} isFullWidth={isFullWidth} size={buttonSize} variant={variant} padding={2}>
+            <InlineText name="buttonText" />
+          </Button>
         </Link>
-      </GridItem>
-    </BlocksControls>
+      </BlocksControls>
+    </GridItem>
   )
 }
 
 export const ButtonComponentTemplate = {
-  label: 'Text and Image content',
+  label: 'Button',
+  defaultItem: {
+    buttonText: 'Button Text',
+    link: '/',
+    padding: '3',
+    width: widths.container.name
+  },
   fields: [
     {
       component: 'text',

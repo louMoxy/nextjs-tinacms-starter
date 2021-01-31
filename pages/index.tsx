@@ -9,8 +9,7 @@ import { useCreatePage } from '../utils/useCreatePage'
 import { useCreateBlogPage } from '../utils/useCreateBlogPage'
 import { InlineForm, InlineBlocks } from 'react-tinacms-inline'
 import { TextContent, TextContentTemplate } from '../components/TextContent'
-import { ImageComponent } from '../components/Image'
-import { ImageComponentTemplate } from '../components/ImageComponent'
+import { ImageComponent, ImageComponentTemplate } from '../components/ImageComponent'
 import { ButtonComponent, ButtonComponentTemplate } from '../components/ButtonComponent'
 
 const formOptions = {
