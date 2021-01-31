@@ -27,7 +27,7 @@ export const TextContent = ({ index, data }: Props) => {
               format='html'
               imageProps={{
                 parse: media => `/${media.filename}`,
-                uploadDir: () => '/public/'
+                uploadDir: () => '/'
               }}
             >
               {data.html && <div

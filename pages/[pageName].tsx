@@ -1,7 +1,7 @@
 import { Layout } from '../components/Layout'
 import { Box, Text } from '@chakra-ui/layout'
 import { getGithubPreviewProps, parseJson } from 'next-tinacms-github'
-import { usePlugin } from 'tinacms'
+import { usePlugin, ModalProvider } from 'tinacms'
 import { useGithubJsonForm } from 'react-tinacms-github'
 import { GitFile } from 'react-tinacms-github/dist/src/form/useGitFileSha'
 import { useRouter } from 'next/router'
@@ -9,20 +9,17 @@ import { fileToUrl } from '../utils/fileToUrl'
 import { getLocalFiles } from '../utils/getLocalFiles'
 import { useCreatePage } from '../utils/useCreatePage'
 import { useCreateBlogPage } from '../utils/useCreateBlogPage'
-import { ColumnContent, ColumnContentTemplate } from '../components/columnContent'
+import { ButtonComponent, ButtonComponentTemplate } from '../components/ButtonComponent'
+import { ImageComponent } from '../components/Image'
+import { ImageComponentTemplate } from '../components/ImageComponent'
+import { TextContent, TextContentTemplate } from '../components/TextContent'
+import { GridContainer } from '.'
+import { InlineForm, InlineBlocks } from 'react-tinacms-inline'
 
 const formOptions = {
   label: 'Page',
   fields: [
-    { name: 'title', component: 'text' },
-    {
-      label: 'Page Sections',
-      name: 'blocks',
-      component: 'blocks',
-      templates: {
-        ColumnContent: ColumnContentTemplate
-      }
-    }
+    { name: 'title', component: 'text' }
   ]
 }
 
@@ -46,24 +43,35 @@ export default function Page ({ file, allPages, allBlogs }: Props) {
     return <div>Loading...</div>
   }
 
-  const [page, form] = useGithubJsonForm(file, formOptions)
+  const [, form] = useGithubJsonForm(file, formOptions)
   usePlugin(form)
 
-  const blocks = page.blocks || []
   return (
     <Layout>
-      <Text>{page.title}</Text>
-      {blocks &&
-        blocks.map(({ _template, ...data }, i) => {
-          switch (_template) {
-            case 'ColumnContent':
-              return <ColumnContent data={data} key={i} />
-            default:
-              return true
-          }
-        })}
+      <ModalProvider>
+        <InlineForm form={form}>
+          <InlineBlocks name="blocks" blocks={PAGE_BLOCKS as any} components={{
+            Container: GridContainer
+          }} />
+        </InlineForm>
+      </ModalProvider>
     </Layout>
   )
+}
+
+const PAGE_BLOCKS = {
+  textContent: {
+    Component: TextContent,
+    template: TextContentTemplate
+  },
+  image: {
+    Component: ImageComponent,
+    template: ImageComponentTemplate
+  },
+  button: {
+    Component: ButtonComponent,
+    template: ButtonComponentTemplate
+  }
 }
 
 // /**

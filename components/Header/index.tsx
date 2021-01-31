@@ -26,7 +26,7 @@ export const Header = () => {
   useEffect(() => {
     if (isLargeScreen) {
       setNav(dummyNav.map(({ name, link }, index) => (
-        <Link href={link} key={index} passHref><UILink p='4' _hover={{ bgGradient: 'linear(to-r, red.500, yellow.500)' }}>{name}</UILink></Link>
+        <Link href={link} key={index} passHref><UILink p='4' _hover={{ textDecoration: 'underline' }}>{name}</UILink></Link>
       )))
     } else {
       setNav(<Menu>
@@ -43,7 +43,11 @@ export const Header = () => {
   return (
         <Box bg='white' boxShadow="base">
             <Flex maxW='xl' m='auto' p='3' justify='space-between' align={'center'}>
-              <ImageComponent src='/logo.png' width='200px' alt='logo'/>
+              <Link href='/'>
+                <>
+                  <ImageComponent src='/logo.png' width='200px' alt='logo'/>
+                </>
+              </Link>
               <Flex>
                 {Nav}
               </Flex>

@@ -36,12 +36,18 @@ export const useCreateBlogPage = (allBlogs = []) => {
           required: true
         },
         {
+          name: 'date',
+          label: 'Created at',
+          component: 'date',
+          dateFormat: 'DD MM YYYY',
+          timeFormat: false
+        },
+        {
           label: 'Feature Image',
           name: 'featureImg',
           component: 'image',
-          parse: (media) => `/images/${media.filename}`,
-          uploadDir: () => 'public/images/',
-          previewSrc: (fullSrc) => fullSrc.replace('/public', ''),
+          parse: (media) => `/${media.filename}`,
+          uploadDir: () => '/',
           required: true
         },
         {

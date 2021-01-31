@@ -1,0 +1,10 @@
+{
+    "header": {
+        "navigation": [
+            {
+                "name": "link 1",
+                "link": "/"
+            }
+        ]
+    }
+}

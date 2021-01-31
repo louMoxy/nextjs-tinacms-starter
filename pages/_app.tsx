@@ -8,7 +8,6 @@ import {
 } from 'react-tinacms-github'
 import { NextGithubMediaStore } from 'next-tinacms-github'
 import { DateFieldPlugin } from 'react-tinacms-date'
-import styled from 'styled-components'
 
 const sizes = {
   sm: '400px',
@@ -16,54 +15,6 @@ const sizes = {
   lg: '900px',
   xl: '1200px'
 }
-
-const Container = styled.div`
- h1 {
-   font-size: 3rem;
- }
- h2 {
-   font-size: 2.5rem;
- }
- h3 {
-  font-size: 2.2rem;
-}
-h4 {
-  font-size: 2rem;
-}
-h5 {
-  font-size: 1.5rem;
-}
-h6 {
-  font-size: 1rem;
-}
-[class^="MenuOption"] {
-  color: black !important;
-}
-img {
-  margin: 0 auto;
-}
-table {
-  margin: 0 auto;
-  color: #333;
-  background: white;
-  border: 1px solid grey;
-  font-size: 12pt;
-  border-collapse: collapse;
-}
-table thead th,
-table tfoot th {
-  color: #777;
-  background: rgba(0,0,0,.1);
-}
-table caption {
-  padding:.5em;
-}
-table th,
-table td {
-  padding: .5em;
-  border: 1px solid lightgrey;
-}
-`
 
 const theme: ThemeConfig = extendTheme({ sizes })
 
@@ -91,9 +42,8 @@ const onLogout = () => {
 export default class Site extends App {
   cms: TinaCMS
 
-  constructor(props) {
+  constructor (props) {
     super(props)
-
     const github = new GithubClient({
       proxy: '/api/proxy-github',
       authCallbackRoute: '/api/create-github-access-token',
@@ -129,10 +79,8 @@ export default class Site extends App {
           error={pageProps.error}
         >
           <ChakraProvider theme={theme}>
-            <Container>
               <Component {...pageProps} />
               <EditLink cms={this.cms} />
-            </Container>
           </ChakraProvider>
         </TinacmsGithubProvider>
       </TinaProvider>
