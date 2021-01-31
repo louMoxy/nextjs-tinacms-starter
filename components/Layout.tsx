@@ -10,7 +10,7 @@ export const Layout = ({ children }: Props) => {
   return (
     <>
       <Header/>
-      {children}
+        {children}
       <footer>
         <Box maxW='xl' justifyContent='center' m='auto' p='3'>
           <Text fontSize="xs" >Copyright footer text</Text>

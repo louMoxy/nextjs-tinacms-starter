@@ -1,3 +1,9 @@
 {
-  "title": "Home page title"
+  "title": "Home page title",
+  "block": [
+    {
+      "_template": "ColumnContent",
+      "name": "tester"
+    }
+  ]
 }

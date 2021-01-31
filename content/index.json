@@ -1,0 +1,16 @@
+{
+  "title": "Homepage",
+  "blocks": [
+    {
+      "_template": "textContent",
+      "html": "<p>Add text here</p>",
+      "bgColor": "#3d6fb3",
+      "textColor": "white",
+      "textAlign": "center"
+    },
+    {
+      "_template": "button",
+      "buttonText": "Click button"
+    }
+  ]
+}

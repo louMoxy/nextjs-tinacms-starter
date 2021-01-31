@@ -26,7 +26,7 @@ export const Header = () => {
   useEffect(() => {
     if (isLargeScreen) {
       setNav(dummyNav.map(({ name, link }, index) => (
-        <Link href={link} key={index} passHref><UILink p='4' className={router.pathname ? 'active' : ''}>{name}</UILink></Link>
+        <Link href={link} key={index} passHref><UILink p='4' _hover={{ bgGradient: 'linear(to-r, red.500, yellow.500)' }}>{name}</UILink></Link>
       )))
     } else {
       setNav(<Menu>

@@ -7,7 +7,7 @@ interface Props {
   width?: string;
   alt?: string;
 }
-export const ImageComponent = ({ src, height = 'auto', width='auto', alt = '' }: Props) => {
+export const ImageComponent = ({ src, height = 'auto', width = 'auto', alt = '' }: Props) => {
   return (
     <Image height={height} width={width} src={src} alt={alt} />
   )
