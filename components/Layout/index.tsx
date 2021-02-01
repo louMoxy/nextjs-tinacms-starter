@@ -12,12 +12,11 @@ interface Props {
 }
 
 export const Layout = ({ children, global }: Props) => {
-  const [data, hForm] = useGithubJsonForm(global, headerForm)
+  const [globalData, hForm] = useGithubJsonForm(global, headerForm)
   useFormScreenPlugin(hForm)
-  console.log(data)
   return (
     <>
-      <Header/>
+      <Header data={globalData?.data}/>
         <Container>
           {children}
         </Container>

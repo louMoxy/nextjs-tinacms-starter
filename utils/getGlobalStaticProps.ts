@@ -1,11 +1,12 @@
 import { getGithubPreviewProps, parseJson } from 'next-tinacms-github'
 
 export const getGlobalStaticProps = async (preview, previewData) => {
+  const fileRelativePath = 'content/global.json'
   if (preview) {
     const global = (
       await getGithubPreviewProps({
         ...previewData,
-        fileRelativePath: 'global.json',
+        fileRelativePath,
         parse: parseJson
       })
     ).props
@@ -18,7 +19,7 @@ export const getGlobalStaticProps = async (preview, previewData) => {
   return {
     global: {
       data: (await import('../content/global.json')).default,
-      fileRelativePath: 'content/global.json'
+      fileRelativePath
     }
   }
 }

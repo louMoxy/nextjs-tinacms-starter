@@ -4,35 +4,32 @@ import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { ImageComponent } from '../Image'
 
-const dummyNav = [
-  {
-    name: 'Nav item 1',
-    link: '/'
-  },
-  {
-    name: 'Nav item 2',
-    link: '/'
-  },
-  {
-    name: 'Nav item 3',
-    link: '/'
+interface Props {
+  data?: {
+    header: {
+      navigation: {
+        name: string
+        link: string
+      }[]
+    }
   }
-]
+}
 
-export const Header = () => {
+export const Header = ({ data }: Props) => {
   const router = useRouter()
   const [isLargeScreen] = useMediaQuery('(min-width: 900px)')
   const [Nav, setNav] = useState(null)
+  const navigation = data?.header.navigation || []
   useEffect(() => {
     if (isLargeScreen) {
-      setNav(dummyNav.map(({ name, link }, index) => (
+      setNav(navigation.map(({ name, link }, index) => (
         <Link href={link} key={index} passHref><UILink p='4' _hover={{ textDecoration: 'underline' }}>{name}</UILink></Link>
       )))
     } else {
       setNav(<Menu>
         <MenuButton>Menu</MenuButton>
         <MenuList>
-          {dummyNav.map(({ name, link }, index) => (
+          {navigation.map(({ name, link }, index) => (
             <MenuItem key={index} className={router.pathname ? 'active' : ''}><Link href={link}><a className={router.pathname ? 'active' : ''}>{name}</a></Link></MenuItem>
           ))}
         </MenuList>

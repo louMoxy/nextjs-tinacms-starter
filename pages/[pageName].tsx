@@ -15,6 +15,7 @@ import { ImageComponentTemplate } from '../components/ImageComponent'
 import { TextContent, TextContentTemplate } from '../components/TextContent'
 import { GridContainer } from '.'
 import { InlineForm, InlineBlocks } from 'react-tinacms-inline'
+import { getGlobalStaticProps } from '../utils/getGlobalStaticProps'
 
 const formOptions = {
   label: 'Page',
@@ -23,15 +24,15 @@ const formOptions = {
   ]
 }
 
-interface Props {file: GitFile, allPages: string[], allBlogs: string[]}
+interface Props {file: GitFile, allPages: string[], allBlogs: string[], global: any}
 
-export default function Page ({ file, allPages, allBlogs }: Props) {
+export default function Page ({ file, allPages, allBlogs, global }: Props) {
   useCreatePage(allPages)
   useCreateBlogPage(allBlogs)
   const router = useRouter()
   if (!file) {
     return (
-      <Layout>
+      <Layout global={global}>
         <Box maxW='xl' justifyContent='center' m='auto' p='3'>
           <Text>No file was found, please check if the build has completed</Text>
         </Box>
@@ -80,6 +81,7 @@ const PAGE_BLOCKS = {
 export const getStaticProps = async function ({ preview, previewData, params }) {
   const allPages = (await getLocalFiles('content') || []).map((fileName) => fileName.replace('content/', '').replace('.json', ''))
   const allBlogs = (await getLocalFiles('content/blog') || []).map((fileName) => fileName.replace('content/blog/', '').replace('.json', ''))
+  const global = await getGlobalStaticProps(preview, previewData)
 
   const { pageName } = params
   const fileRelativePath = `content/${pageName}.json`
@@ -92,6 +94,7 @@ export const getStaticProps = async function ({ preview, previewData, params }) 
       })
       return {
         props: {
+          global,
           allPages,
           allBlogs,
           previewURL: `https://raw.githubusercontent.com/${previewData.working_repo_full_name}/${previewData.head_branch}`,
@@ -101,6 +104,7 @@ export const getStaticProps = async function ({ preview, previewData, params }) 
     } catch (e) {
       return {
         props: {
+          global,
           allPages,
           allBlogs,
           previewURL: `https://raw.githubusercontent.com/${previewData.working_repo_full_name}/${previewData.head_branch}`,
@@ -117,6 +121,7 @@ export const getStaticProps = async function ({ preview, previewData, params }) 
 
   return {
     props: {
+      global,
       allPages,
       allBlogs,
       sourceProvider: null,
