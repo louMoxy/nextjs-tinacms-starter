@@ -8,7 +8,7 @@ import { headerForm } from './headerForm'
 
 interface Props {
   children: ReactNode,
-  global: any
+  global?: any
 }
 
 export const Layout = ({ children, global }: Props) => {
