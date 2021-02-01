@@ -48,7 +48,7 @@ export default function Page ({ file, allPages, allBlogs, global }: Props) {
   usePlugin(form)
 
   return (
-    <Layout>
+    <Layout global={global}>
       <ModalProvider>
         <InlineForm form={form}>
           <InlineBlocks name="blocks" blocks={PAGE_BLOCKS as any} components={{

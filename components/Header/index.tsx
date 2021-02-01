@@ -19,8 +19,8 @@ export const Header = ({ data }: Props) => {
   const router = useRouter()
   const [isLargeScreen] = useMediaQuery('(min-width: 900px)')
   const [Nav, setNav] = useState(null)
-  const navigation = data?.header.navigation || []
   useEffect(() => {
+    const navigation = data?.header?.navigation || []
     if (isLargeScreen) {
       setNav(navigation.map(({ name, link }, index) => (
         <Link href={link} key={index} passHref><UILink p='4' _hover={{ textDecoration: 'underline' }}>{name}</UILink></Link>
@@ -35,7 +35,7 @@ export const Header = ({ data }: Props) => {
         </MenuList>
       </Menu>)
     }
-  }, [isLargeScreen])
+  }, [isLargeScreen, data])
 
   return (
         <Box bg='white' boxShadow="base">

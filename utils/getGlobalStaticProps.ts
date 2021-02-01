@@ -2,24 +2,42 @@ import { getGithubPreviewProps, parseJson } from 'next-tinacms-github'
 
 export const getGlobalStaticProps = async (preview, previewData) => {
   const fileRelativePath = 'content/global.json'
+
   if (preview) {
-    const global = (
-      await getGithubPreviewProps({
+    try {
+      const previewProps = await getGithubPreviewProps({
         ...previewData,
         fileRelativePath,
         parse: parseJson
       })
-    ).props
-
-    return {
-      global
+      return {
+        props: {
+          previewURL: `https://raw.githubusercontent.com/${previewData.working_repo_full_name}/${previewData.head_branch}`,
+          ...previewProps.props
+        }
+      }
+    } catch (e) {
+      return {
+        props: {
+          previewURL: `https://raw.githubusercontent.com/${previewData.working_repo_full_name}/${previewData.head_branch}`,
+          file: {
+            fileRelativePath,
+            data: null
+          }
+        }
+      }
     }
   }
 
+
+  const data = (await import('../content/global.json')).default
+
   return {
-    global: {
-      data: (await import('../content/global.json')).default,
-      fileRelativePath
+    props: {
+      file: {
+        data,
+        fileRelativePath
+      }
     }
   }
 }

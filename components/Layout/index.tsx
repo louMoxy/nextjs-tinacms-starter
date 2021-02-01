@@ -10,13 +10,18 @@ interface Props {
   children: ReactNode,
   global?: any
 }
+const dummyGlobal = {
+  props: {
+    file: {}
+  }
+}
 
-export const Layout = ({ children, global }: Props) => {
-  const [globalData, hForm] = useGithubJsonForm(global, headerForm)
+export const Layout = ({ children, global = dummyGlobal }: Props) => {
+  const [data, hForm] = useGithubJsonForm(global.props.file, headerForm)
   useFormScreenPlugin(hForm)
   return (
     <>
-      <Header data={globalData?.data}/>
+      <Header data={data}/>
         <Container>
           {children}
         </Container>

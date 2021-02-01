@@ -31,7 +31,6 @@ export const GridContainer = ({ innerRef, children }: { innerRef: any, children:
 export default function Page ({ file, allPages, allBlogs, global }: Props) {
   useCreatePage(allPages)
   useCreateBlogPage(allBlogs)
-
   const [, form] = useGithubJsonForm(file, formOptions)
   usePlugin(form)
   return (
